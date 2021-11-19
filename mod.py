@@ -17,6 +17,9 @@ def shibPrice():
 def currencyTickerLowercase(currency, ticker):
     return ticker.lower() + currency.lower()
 
+def currencyTickerUppercase(currency, ticker):
+    return ticker.upper() + currency.upper()
+
 def tickerPrice(currency, ticker):
     lcTicker = currencyTickerLowercase(currency, ticker)
     tickerData = wazirClient.send("historical_trades",
@@ -26,3 +29,11 @@ def tickerPrice(currency, ticker):
     tickerPrice_parsed = tickerData[1][1]
     tickerPriceRec = tickerPrice_parsed.get("price")
     return tickerPriceRec
+
+def PriceBreakoutAlert(currency, ticker, alertPrice):
+    while True:
+        currentPrice = tickerPrice(currency, ticker)
+        if (currentPrice == alertPrice):
+            ucCurrency = currency.upper()
+            ucTicker = ticker.upper()
+            return f"{ucTicker}({ucCurrency}) has hit {alertPrice}!"
