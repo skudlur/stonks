@@ -2,25 +2,25 @@ import discord
 import os
 from wazirx_sapi_client.rest import Client
 import shib
+from discord.ext import commands
 
 wazirClient = Client()
 wazirClient = Client(api_key=os.getenv('api_key'), secret_key=os.getenv('secret_key'))
 
 client = discord.Client()
 
-@client.event
-async def on_ready():
-    print("We have logged in as {0.user}".format(client))
+bot = commands.Bot(command_prefix = '$')
 
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
+@bot.command()
+async def test(mes):
+    await mes.channel.send("Testing 1, 2, 3...")
 
-    if message.content.startswith('$hello'):
-        await message.channel.send('Hello!')
+@bot.command()
+async def price(com, cur, ticker):
+    await com.channel.send(shib.tickerPrice(cur, ticker))
 
-    if message.content.startswith('$shib'):
-        await message.channel.send(shib.shibPrice())
+# @bot.command()
+# async def alert(com, cur, ticker, alertPrice):
 
-client.run(os.getenv('TOKEN'))
+# client.run(os.getenv('TOKEN'))
+bot.run((os.getenv('TOKEN')))
